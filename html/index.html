@@ -1,2 +1,60 @@
-hello!
-<a href="/l/">goto list</a>
+<html>
+  <head>
+    <title>KWIK-E-MART</title>
+    <script src="https://unpkg.com/history@4.9.0"></script>
+    <script src="/c/pages.js" async></script>
+    <script src="/d/pages.js" async></script>
+    <script src="/l/pages.js" async></script>
+  </head>
+  <body>
+    <div id="app-shell">
+      <div id="app-content"><span>content not loaded yet</span></div>
+    </div>
+    <script type="module">
+      console.log("app-shell init");
+
+      const appContent = document.querySelector("#app-content");
+
+      const routes = {
+        "/product/": "d-pages",
+        "/checkout/": "c-pages",
+        "/": "l-pages"
+      };
+
+      function findComponentName(pathname) {
+        const prefix = Object.keys(routes).find(key =>
+          pathname.startsWith(key)
+        );
+        return routes[prefix];
+      }
+
+      function updateTopLevelComponent(location) {
+        console.log("app-shell updateTopLevelComponent");
+        const next = findComponentName(location.pathname);
+        const current = appContent.firstChild;
+        if (current.nodeName.toLowerCase() !== next) {
+          console.log("app-shell updateTopLevelComponent change");
+          console.log("route change (top level)");
+          const newComponent = document.createElement(next);
+          appContent.replaceChild(newComponent, current);
+        } else {
+          console.log("app-shell updateTopLevelComponent no-change");
+        }
+      }
+
+      window.appHistory = window.History.createBrowserHistory();
+      window.appHistory.listen(updateTopLevelComponent);
+      updateTopLevelComponent(window.location);
+
+      document.addEventListener("click", e => {
+        console.log("app-shell click");
+        if (e.target.nodeName === "A") {
+          const href = e.target.getAttribute("href");
+          window.appHistory.push(href);
+          e.preventDefault();
+        }
+      });
+    </script>
+
+  </body>
+</html>
