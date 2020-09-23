@@ -1,6 +1,16 @@
 <html>
   <head>
     <title>KWIK-E-MART</title>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      href="https://www.unpkg.com/materialize-css@1.0.0/dist/css/materialize.min.css"
+      type="text/css"
+      rel="stylesheet"
+      media="screen,projection"
+    />
     <script src="https://unpkg.com/history@4.9.0"></script>
     <script src="/c/js/pages.js" type="module" async></script>
     <script src="/d/js/pages.js" type="module" async></script>
@@ -18,12 +28,12 @@
       const routes = {
         "/product": "d-pages",
         "/checkout": "c-pages",
-        "/": "l-pages"
+        "/": "l-pages",
       };
 
       function findComponentName(pathname) {
-        const prefix = Object.keys(routes).find(key =>
-          pathname.startsWith(key)
+        const prefix = Object.keys(routes).find((key) =>
+          pathname.startsWith(key),
         );
         return routes[prefix];
       }
@@ -46,7 +56,7 @@
       window.appHistory.listen(updateTopLevelComponent);
       updateTopLevelComponent(window.location);
 
-      document.addEventListener("click", e => {
+      document.addEventListener("click", (e) => {
         console.log("app-shell click");
         if (e.target.nodeName === "A") {
           const href = e.target.getAttribute("href");
@@ -55,6 +65,5 @@
         }
       });
     </script>
-
   </body>
 </html>
