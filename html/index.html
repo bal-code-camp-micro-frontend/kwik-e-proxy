@@ -58,6 +58,7 @@
 
       document.addEventListener("click", (e) => {
         console.log("app-shell click");
+        console.log(e.target, e.target.getAttribute("href"), e.target.nodeName)
         if (e.target.nodeName === "A") {
           const href = e.target.getAttribute("href");
           window.appHistory.push(href);
