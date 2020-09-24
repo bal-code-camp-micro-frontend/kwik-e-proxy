@@ -56,6 +56,12 @@
       window.appHistory.listen(updateTopLevelComponent);
       updateTopLevelComponent(window.location);
 
+      document.addEventListener("a:location:changed", (e) => {
+        if (e.detail.href) {
+          window.appHistory.push(href);
+        }
+      });
+
       document.addEventListener("click", (e) => {
         console.log("app-shell click");
         if (e.target.nodeName === "A") {
