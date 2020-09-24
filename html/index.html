@@ -56,15 +56,16 @@
       window.appHistory.listen(updateTopLevelComponent);
       updateTopLevelComponent(window.location);
 
-      document.addEventListener("a:location:changed", (e) => {
+      window.addEventListener("a:location:changed", (e) => {
+        console.log("a:location:changed");
         if (e.detail.href) {
           window.appHistory.push(href);
         }
       });
 
-      document.addEventListener("click", (e) => {
+      window.addEventListener("click", (e) => {
         console.log("app-shell click");
-        console.log(e.target, e.target.getAttribute("href"), e.target.nodeName)
+        console.log(e.target, e.target.getAttribute("href"), e.target.nodeName);
         if (e.target.nodeName === "A") {
           const href = e.target.getAttribute("href");
           window.appHistory.push(href);
