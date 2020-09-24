@@ -59,7 +59,7 @@
       window.addEventListener("a:location:changed", (e) => {
         console.log("a:location:changed");
         if (e.detail.href) {
-          window.appHistory.push(href);
+          window.appHistory.push(e.detail.href);
         }
       });
 
