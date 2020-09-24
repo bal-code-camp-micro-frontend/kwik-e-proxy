@@ -11,68 +11,31 @@
       rel="stylesheet"
       media="screen,projection"
     />
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/single-spa/5.6.0/umd/single-spa.min.js"></script>
   </head>
   <body>
-    <div id="app-shell">
-      <div id="app-content"><span>content not loaded yet</span></div>
-    </div>
-    <script src="https://unpkg.com/history@4.9.0"></script>
-    <script src="/c/js/pages.js" type="module" async></script>
-    <script src="/d/js/pages.js" type="module" async></script>
-    <script src="/l/js/pages.js" type="module" async></script>
+    <div id="app-inspire"></div>
+    <div id="app-decide"></div>
+    <div id="app-checkout"></div>
+
     <script type="module">
-      console.log("app-shell init");
-
-      const appContent = document.querySelector("#app-content");
-
-      const routes = {
-        "/product": "d-pages",
-        "/checkout": "c-pages",
-        "/": "l-pages",
-      };
-
-      function findComponentName(pathname) {
-        const prefix = Object.keys(routes).find((key) =>
-          pathname.startsWith(key),
-        );
-        return routes[prefix];
-      }
-
-      function updateTopLevelComponent(location) {
-        console.log("app-shell updateTopLevelComponent");
-        const next = findComponentName(location.pathname);
-        const current = appContent.firstChild;
-        if (current.nodeName.toLowerCase() !== next) {
-          console.log("app-shell updateTopLevelComponent change");
-          console.log("route change (top level)");
-          const newComponent = document.createElement(next);
-          appContent.replaceChild(newComponent, current);
-        } else {
-          console.log("app-shell updateTopLevelComponent no-change");
-        }
-      }
-
-      window.appHistory = window.History.createBrowserHistory();
-      window.appHistory.listen(updateTopLevelComponent);
-      updateTopLevelComponent(window.location);
-
-      window.addEventListener("a:location:changed", (e) => {
-        console.log("a:location:changed");
-        if (e.detail.href) {
-          window.appHistory.push(e.detail.href);
-        }
-      });
-
-      window.addEventListener("click", (e) => {
-        console.log("app-shell click");
-        console.log(e.target, e.target.getAttribute("href"), e.target.nodeName);
-        if (e.target.nodeName === "A") {
-          const href = e.target.getAttribute("href");
-          window.appHistory.push(href);
-          e.preventDefault();
-        }
-      });
+      singleSpa.registerApplication(
+              "list",
+              () => import("http://localhost:3000/l/js/pages.js"),
+              ({ pathname }) => pathname === "/"
+      );
+      singleSpa.registerApplication(
+              "detail",
+              () => import("http://localhost:3001/d/js/pages.js"),
+              ({ pathname }) => pathname.startsWith("/product/")
+      );
+      singleSpa.registerApplication(
+              "checkout",
+              () => import("http://localhost:3002/c/js/pages.js"),
+              ({ pathname }) => pathname.startsWith("/checkout/")
+      );
+      singleSpa.start();
     </script>
   </body>
 </html>
