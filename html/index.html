@@ -13,6 +13,8 @@
     />
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/single-spa/5.6.0/umd/single-spa.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/single-spa-html"></script>
+    <script src="/l/js/pages.js" type="module"/>
   </head>
   <body>
     <div id="app-inspire"></div>
@@ -20,21 +22,26 @@
     <div id="app-checkout"></div>
 
     <script type="module">
-      singleSpa.registerApplication(
-              "list",
-              () => import("http://localhost:3000/l/js/pages.js"),
-              ({ pathname }) => pathname === "/"
-      );
+      const webComponentApp = window.singleSpaHtml.default({
+        template: props => `<l-pages></l-pages>`,
+      });
+
+      singleSpa.registerApplication({
+              name: "list",
+              app: webComponentApp,
+              activeWhen: ({ pathname }) => pathname === "/"
+      });
       singleSpa.registerApplication(
               "detail",
-              () => import("http://localhost:3001/d/js/pages.js"),
+              () => import("/d/js/pages.js"),
               ({ pathname }) => pathname.startsWith("/product/")
       );
       singleSpa.registerApplication(
               "checkout",
-              () => import("http://localhost:3002/c/js/pages.js"),
+              () => import("/c/js/pages.js"),
               ({ pathname }) => pathname.startsWith("/checkout/")
       );
+
       singleSpa.start();
     </script>
   </body>
