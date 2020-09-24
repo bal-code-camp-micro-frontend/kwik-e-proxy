@@ -30,12 +30,12 @@
       singleSpa.registerApplication(
               "detail",
               () => import("/d/js/pages.js"),
-              ({ pathname }) => pathname.startsWith("/product/")
+              ({ pathname }) => pathname.startsWith("/product")
       );
       singleSpa.registerApplication(
               "checkout",
               () => import("/c/js/pages.js"),
-              ({ pathname }) => pathname.startsWith("/checkout/")
+              ({ pathname }) => pathname.startsWith("/checkout")
       );
 
       singleSpa.start();
